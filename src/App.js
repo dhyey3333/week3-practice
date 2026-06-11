@@ -1,150 +1,283 @@
 import { useState } from "react";
-import Navbar from "./components/Navbar";
-import StatCard from "./components/StatCard";
 
 function App() {
 
-  const [employees, setEmployees] = useState(120);
-  const [projects, setProjects] = useState(15);
+  const [employees, setEmployees] = useState([
+    {
+      id: 1,
+      name: "John",
+      department: "Development"
+    },
+    {
+      id: 2,
+      name: "Sarah",
+      department: "HR"
+    }
+  ]);
+
+  const [name, setName] = useState("");
+  const [department, setDepartment] = useState("");
+
+  const addEmployee = () => {
+
+    if(name === "" || department === ""){
+
+      alert("Please fill all fields");
+      return;
+
+    }
+
+    const newEmployee = {
+
+      id: employees.length + 1,
+      name: name,
+      department: department
+
+    };
+
+    setEmployees([...employees,newEmployee]);
+
+    setName("");
+    setDepartment("");
+
+  };
 
   return (
+
     <div
       style={{
-        minHeight: "100vh",
+        minHeight:"100vh",
         background:
-          "linear-gradient(135deg,#0f172a,#1e3a8a)",
-        color: "white"
+        "linear-gradient(135deg,#0f172a,#1e3a8a)",
+        padding:"30px",
+        color:"white",
+        fontFamily:"Segoe UI"
       }}
     >
 
-      <Navbar />
+      <h1>
+        🚀 Digizura Employee Management Portal
+      </h1>
 
-      <div style={{ padding: "40px" }}>
+      <p>
+        Week 2 Day 4 - Forms & Validation
+      </p>
 
-        <h1>🚀 Digizura Employee Portal</h1>
+      <div
+        style={{
+          display:"grid",
+          gridTemplateColumns:
+          "repeat(auto-fit,minmax(250px,1fr))",
+          gap:"20px",
+          marginTop:"30px"
+        }}
+      >
 
-        <p>
-          Week 2 Day 3 - React State Management
-        </p>
+        <div style={cardStyle}>
+          <h1>{employees.length}</h1>
+          <p>Total Employees</p>
+        </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit,minmax(250px,1fr))",
-            gap: "20px",
-            marginTop: "30px"
-          }}
-        >
+        <div style={cardStyle}>
+          <h1>15</h1>
+          <p>Projects</p>
+        </div>
 
-          <StatCard
-            number={employees}
-            title="Employees"
+        <div style={cardStyle}>
+          <h1>320</h1>
+          <p>Tasks Completed</p>
+        </div>
+
+        <div style={cardStyle}>
+          <h1>₹2.5 Cr</h1>
+          <p>Revenue</p>
+        </div>
+
+      </div>
+
+      <div
+        style={{
+          display:"grid",
+          gridTemplateColumns:"1fr 2fr",
+          gap:"20px",
+          marginTop:"40px"
+        }}
+      >
+
+        <div style={glassCard}>
+
+          <h2>Add Employee</h2>
+
+          <input
+            type="text"
+            placeholder="Employee Name"
+            value={name}
+            onChange={(e)=>
+              setName(e.target.value)
+            }
+            style={inputStyle}
           />
 
-          <StatCard
-            number={projects}
-            title="Projects"
-          />
+          <select
+            value={department}
+            onChange={(e)=>
+              setDepartment(e.target.value)
+            }
+            style={inputStyle}
+          >
 
-          <StatCard
-            number="320"
-            title="Tasks Completed"
-          />
+            <option value="">
+              Select Department
+            </option>
 
-          <StatCard
-            number="₹2.5 Cr"
-            title="Revenue"
-          />
+            <option>
+              Development
+            </option>
+
+            <option>
+              HR
+            </option>
+
+            <option>
+              Sales
+            </option>
+
+            <option>
+              Marketing
+            </option>
+
+          </select>
+
+          <button
+            onClick={addEmployee}
+            style={buttonStyle}
+          >
+            Add Employee
+          </button>
 
         </div>
 
-        <div
-          style={{
-            marginTop: "40px",
-            display: "flex",
-            gap: "15px",
-            flexWrap: "wrap"
-          }}
-        >
+        <div style={glassCard}>
 
-          <button
-            onClick={() => setEmployees(employees + 1)}
-            style={btnGreen}
+          <h2>Employee Directory</h2>
+
+          <table
+            style={{
+              width:"100%",
+              borderCollapse:"collapse"
+            }}
           >
-            ➕ Add Employee
-          </button>
 
-          <button
-            onClick={() => setEmployees(employees - 1)}
-            style={btnRed}
-          >
-            ➖ Remove Employee
-          </button>
+            <thead>
 
-          <button
-            onClick={() => setProjects(projects + 1)}
-            style={btnBlue}
-          >
-            📁 Add Project
-          </button>
+              <tr>
 
-        </div>
+                <th style={tableHead}>
+                  ID
+                </th>
 
-        <div
-          style={{
-            marginTop: "40px",
-            background:
-              "rgba(255,255,255,0.12)",
-            padding: "25px",
-            borderRadius: "20px",
-            backdropFilter: "blur(10px)"
-          }}
-        >
+                <th style={tableHead}>
+                  Name
+                </th>
 
-          <h2>📢 Live Dashboard Updates</h2>
+                <th style={tableHead}>
+                  Department
+                </th>
 
-          <p>
-            Total Employees: {employees}
-          </p>
+              </tr>
 
-          <p>
-            Total Projects: {projects}
-          </p>
+            </thead>
+
+            <tbody>
+
+              {employees.map((emp)=>(
+
+                <tr key={emp.id}>
+
+                  <td style={tableCell}>
+                    {emp.id}
+                  </td>
+
+                  <td style={tableCell}>
+                    {emp.name}
+                  </td>
+
+                  <td style={tableCell}>
+                    {emp.department}
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
 
         </div>
 
       </div>
 
     </div>
+
   );
+
 }
 
-const btnGreen = {
-  background: "#22c55e",
-  color: "white",
-  border: "none",
-  padding: "12px 20px",
-  borderRadius: "10px",
-  cursor: "pointer"
+const cardStyle = {
+
+  background:"rgba(255,255,255,0.12)",
+  backdropFilter:"blur(10px)",
+  padding:"25px",
+  borderRadius:"20px",
+  textAlign:"center"
+
 };
 
-const btnRed = {
-  background: "#ef4444",
-  color: "white",
-  border: "none",
-  padding: "12px 20px",
-  borderRadius: "10px",
-  cursor: "pointer"
+const glassCard = {
+
+  background:"rgba(255,255,255,0.12)",
+  backdropFilter:"blur(10px)",
+  padding:"25px",
+  borderRadius:"20px"
+
 };
 
-const btnBlue = {
-  background: "#3b82f6",
-  color: "white",
-  border: "none",
-  padding: "12px 20px",
-  borderRadius: "10px",
-  cursor: "pointer"
+const inputStyle = {
+
+  width:"100%",
+  padding:"12px",
+  marginTop:"15px",
+  borderRadius:"10px",
+  border:"none"
+
+};
+
+const buttonStyle = {
+
+  width:"100%",
+  padding:"12px",
+  marginTop:"20px",
+  border:"none",
+  borderRadius:"10px",
+  background:"#22c55e",
+  color:"white",
+  cursor:"pointer"
+
+};
+
+const tableHead = {
+
+  padding:"12px",
+  borderBottom:"1px solid white"
+
+};
+
+const tableCell = {
+
+  padding:"12px",
+  textAlign:"center"
+
 };
 
 export default App;
