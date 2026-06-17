@@ -68,7 +68,6 @@ app.get("/", (req, res) => {
 });
 // GET All Employees
 app.get("/employees", (req, res) => {
-
   db.query(
     "SELECT * FROM employees",
     (err, results) => {
@@ -81,65 +80,54 @@ app.get("/employees", (req, res) => {
 
     }
   );
-
 });
 
 // GET Employee By ID
 app.get("/employees/:id", (req, res) => {
 
   db.query(
-
-    "SELECT * FROM employees WHERE id=?",
-
+    "SELECT * FROM employees WHERE id = ?",
     [req.params.id],
-
     (err, results) => {
 
       if (err) {
         return res.status(500).json(err);
       }
 
+      if (results.length === 0) {
+        return res.status(404).json({
+          message: "Employee not found"
+        });
+      }
+
       res.json(results[0]);
 
     }
-
   );
 
 });
 
-
 // POST Employee
 app.post("/employees", (req, res) => {
 
-  const {
-    name,
-    department,
-    status
-  } = req.body;
+  const { name, department, status } =
+    req.body;
 
   db.query(
-
-    "INSERT INTO employees (name,department,status) VALUES (?,?,?)",
-
-    [
-      name,
-      department,
-      status
-    ],
-
-    (err) => {
+    "INSERT INTO employees (name, department, status) VALUES (?, ?, ?)",
+    [name, department, status],
+    (err, result) => {
 
       if (err) {
         return res.status(500).json(err);
       }
 
       res.json({
-        message:
-          "Employee Added"
+        message: "Employee added",
+        id: result.insertId
       });
 
     }
-
   );
 
 });
@@ -147,23 +135,17 @@ app.post("/employees", (req, res) => {
 // PUT Employee
 app.put("/employees/:id", (req, res) => {
 
-  const {
-    name,
-    department,
-    status
-  } = req.body;
+  const { name, department, status } =
+    req.body;
 
   db.query(
-
     "UPDATE employees SET name=?, department=?, status=? WHERE id=?",
-
     [
       name,
       department,
       status,
       req.params.id
     ],
-
     (err) => {
 
       if (err) {
@@ -171,12 +153,10 @@ app.put("/employees/:id", (req, res) => {
       }
 
       res.json({
-        message:
-          "Employee Updated"
+        message: "Employee updated"
       });
 
     }
-
   );
 
 });
@@ -184,11 +164,8 @@ app.put("/employees/:id", (req, res) => {
 app.delete("/employees/:id", (req, res) => {
 
   db.query(
-
     "DELETE FROM employees WHERE id=?",
-
     [req.params.id],
-
     (err) => {
 
       if (err) {
@@ -196,12 +173,10 @@ app.delete("/employees/:id", (req, res) => {
       }
 
       res.json({
-        message:
-          "Employee Deleted"
+        message: "Employee deleted"
       });
 
     }
-
   );
 
 });
